@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: spendaste
+  profiles:
+    active: dev

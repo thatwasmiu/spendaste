@@ -1,0 +1,32 @@
+server:
+  port: 8090
+  max-http-request-header-size: 32768
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/daste?currentSchema=public
+    username: daste
+    password: daste
+  docker:
+    compose:
+      enabled: false
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoConfiguration
+
+  jpa:
+    show-sql: true  # use in dev mode
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate.id.new_generator_mappings: false
+      hibernate.generate_statistics: false
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 55MB
