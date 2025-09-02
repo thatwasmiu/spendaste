@@ -22,6 +22,8 @@ public class MonthBudget extends BaseEntity {
 
     Long total;
 
+    Long userId;
+
     Long remain;
 
     Long extraIncrease;

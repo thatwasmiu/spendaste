@@ -1,11 +1,12 @@
 package daste.spendaste.module.spend.endpoints;
 
+import daste.spendaste.module.spend.entities.MonthBalance;
 import daste.spendaste.module.spend.entities.MonthSpend;
 import daste.spendaste.module.spend.services.MonthSpendService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("sp/api/aaa")
+@RequestMapping("sp/api/month_spend")
 public class MonthSpendEndpoint {
     private final MonthSpendService monthSpendService;
 
@@ -19,9 +20,15 @@ public class MonthSpendEndpoint {
         return monthSpendService.createMonthSpend(monthSpend);
     }
 
-    @GetMapping("month_spend/{monthYear}")
+    @GetMapping("{monthYear}")
     public void getMonthSpend(@PathVariable(value = "monthYear") Long monthYear) {
         Long userId = 0L;
         monthSpendService.getMonthSpend(userId, monthYear);
+    }
+
+    @GetMapping("calculate")
+    public MonthSpend calculateMonthSpend(@PathVariable(value = "monthYear") Long monthYear) {
+        Long userId = 0L;
+        return monthSpendService.calculateMonthSpend(userId, monthYear);
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("sp/api/aaa")
+@RequestMapping("sp/api/month_balance")
 public class MonthBalanceEndpoint {
     private final MonthBalanceService monthBalanceService;
 
@@ -16,9 +16,15 @@ public class MonthBalanceEndpoint {
         this.monthBalanceService = monthBalanceService;
     }
 
-    @GetMapping("month_budget/{monthYear}")
-    public MonthBalance getMonthSpend(@PathVariable(value = "monthYear") Long monthYear) {
+    @GetMapping("{monthYear}")
+    public MonthBalance getMonthBalance(@PathVariable(value = "monthYear") Long monthYear) {
         Long userId = 0L;
         return monthBalanceService.getMonthBalance(userId, monthYear);
+    }
+
+    @GetMapping("calculate")
+    public MonthBalance calculateMonthBalance(@PathVariable(value = "monthYear") Long monthYear) {
+        Long userId = 0L;
+        return monthBalanceService.calculateMonthBalance(userId, monthYear);
     }
 }
