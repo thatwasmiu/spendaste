@@ -17,4 +17,11 @@ public class MonthBalanceService {
 
         return monthBalanceRepository.findByUserIdAndMonthYear(userId, monthYear);
     }
+
+    public MonthBalance calculateMonthBalance(Long userId, Long monthYear) {
+        MonthBalance monthBalance;
+
+
+        return null;
+    }
 }

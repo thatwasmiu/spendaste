@@ -29,4 +29,9 @@ public class MonthSpendService {
 
         return monthSpendRepository.findByUserIdAndMonthYear(userId, monthYear);
     }
+
+    public MonthSpend calculateMonthSpend(Long userId, Long monthYear) {
+
+        return null;
+    }
 }

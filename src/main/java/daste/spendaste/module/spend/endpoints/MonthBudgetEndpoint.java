@@ -1,13 +1,11 @@
 package daste.spendaste.module.spend.endpoints;
 
+import daste.spendaste.module.spend.entities.MonthBudget;
 import daste.spendaste.module.spend.services.MonthBudgetService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("sp/api/aaa")
+@RequestMapping("sp/api/month_budget")
 public class MonthBudgetEndpoint {
 
     public final MonthBudgetService monthBudgetService;
@@ -16,9 +14,15 @@ public class MonthBudgetEndpoint {
         this.monthBudgetService = monthBudgetService;
     }
 
-    @GetMapping("month_budget/{monthYear}")
-    public void getMonthSpend(@PathVariable(value = "monthYear") Long monthYear) {
+    @GetMapping("{monthYear}")
+    public MonthBudget getMonthBudget(@PathVariable(value = "monthYear") Long monthYear) {
         Long userId = 0L;
-        monthBudgetService.getMonthBudget(userId, monthYear);
+        return monthBudgetService.getMonthBudget(userId, monthYear);
+    }
+
+    @PutMapping("update")
+    public MonthBudget updateMonthBudget(@RequestBody MonthBudget monthBudget) {
+        Long userId = 0L;
+        return monthBudgetService.updateMonthBudget(monthBudget);
     }
 }

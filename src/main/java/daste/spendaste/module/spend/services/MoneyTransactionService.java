@@ -2,6 +2,7 @@ package daste.spendaste.module.spend.services;
 
 import daste.spendaste.module.spend.entities.MoneyTransaction;
 import daste.spendaste.module.spend.entities.MonthBalance;
+import daste.spendaste.module.spend.entities.MonthBudget;
 import daste.spendaste.module.spend.repositories.MoneyTransactionRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,5 +19,10 @@ public class MoneyTransactionService {
 
     public List<MoneyTransaction> getCurrentWeekTransaction(Long userId, Integer weekYear) {
         return moneyTransactionRepository.findByUserIdAndWeekYear(userId, weekYear);
+    }
+
+    public MoneyTransaction createMoneyTransaction(MoneyTransaction moneyTransaction) {
+
+        return moneyTransactionRepository.save(moneyTransaction);
     }
 }

@@ -17,4 +17,10 @@ public class MonthBudgetService {
 
         return monthBudgetRepository.findByUserIdAndMonthYear(userId, monthYear);
     }
+
+    public MonthBudget updateMonthBudget(MonthBudget monthBudget) {
+
+
+        return monthBudgetRepository.save(monthBudget);
+    }
 }
