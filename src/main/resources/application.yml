@@ -3,3 +3,11 @@ spring:
     name: spendaste
   profiles:
     active: dev
+
+
+#logging:
+#  level:
+#    org.springframework: DEBUG
+#    org.springframework.jdbc: TRACE
+#    org.hibernate: DEBUG
+#    org.postgresql: DEBUG
