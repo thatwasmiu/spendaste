@@ -2,12 +2,13 @@ package daste.spendaste.module.spend.endpoints;
 
 import daste.spendaste.module.spend.entities.MoneyTransaction;
 import daste.spendaste.module.spend.services.MoneyTransactionService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("sp/api/money_transaction")
+@RequestMapping("sp/api/money-transaction")
 public class MoneyTransactionEndpoint {
 
     private final MoneyTransactionService moneyTransactionService;
@@ -16,15 +17,18 @@ public class MoneyTransactionEndpoint {
         this.moneyTransactionService = moneyTransactionService;
     }
 
+    @GetMapping("hello")
+    public String hello() {
+        return "Hello " + SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
     @GetMapping("{weekYear}")
     public List<MoneyTransaction> getWeekSpend(@PathVariable(value = "weekYear") Integer weekYear) {
-        Long userId = 0L;
-        return moneyTransactionService.getCurrentWeekTransaction(userId, weekYear);
+        return moneyTransactionService.getCurrentWeekTransaction(weekYear);
     }
 
     @PutMapping("create")
     public MoneyTransaction createMoneyTransaction(@RequestBody MoneyTransaction MoneyTransaction) {
-        Long userId = 0L;
-        return moneyTransactionService.createMoneyTransaction(MoneyTransaction);
+        return moneyTransactionService.create(MoneyTransaction);
     }
 }

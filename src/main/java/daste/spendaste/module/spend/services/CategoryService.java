@@ -12,8 +12,7 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public Category createCategory(Long userId, Category category) {
-
+    public Category create(Category category) {
         return null;
     }
 }

@@ -19,7 +19,6 @@ public class CategoryEndpoint {
 
     @PutMapping("create")
     public Category createMoneyTransaction(@RequestBody Category category) {
-        Long userId = 0L;
-        return categoryService.createCategory(userId, category);
+        return categoryService.create(category);
     }
 }

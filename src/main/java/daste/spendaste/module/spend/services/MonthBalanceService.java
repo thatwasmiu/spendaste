@@ -1,5 +1,6 @@
 package daste.spendaste.module.spend.services;
 
+import daste.spendaste.core.security.SecurityUtils;
 import daste.spendaste.module.spend.entities.MonthBalance;
 import daste.spendaste.module.spend.models.MonthBudget;
 import daste.spendaste.module.spend.models.MonthSpend;
@@ -59,12 +60,12 @@ public class MonthBalanceService {
     }
 
     private void initMonthSpend(MonthBalance monthBalance) {
-        MonthSpend monthSpend = moneyTransactionService.getMonthSpend(monthBalance.getUserId(), monthBalance.getYearMonth());
+        MonthSpend monthSpend = moneyTransactionService.calculateAndgetMonthSpend(monthBalance.getUserId(), monthBalance.getYearMonth());
         monthBalance.setMonthSpend(monthSpend);
     }
 
     public void initMonthBalances(Long monthYear, Long numberOfMonth) {
-        Long userId = 0L;
+        Long userId = SecurityUtils.getCurrentLoginUserId();
         List<MonthBalance> monthBalances = monthBalanceRepository.findAllByUserId(userId);
     }
 }

@@ -1,5 +1,6 @@
 package daste.spendaste.module.spend.services;
 
+import daste.spendaste.core.security.SecurityUtils;
 import daste.spendaste.module.spend.entities.MoneyTransaction;
 import daste.spendaste.module.spend.models.MonthSpend;
 import daste.spendaste.module.spend.repositories.MoneyTransactionRepository;
@@ -16,19 +17,18 @@ public class MoneyTransactionService {
         this.moneyTransactionRepository = moneyTransactionRepository;
     }
 
-    public List<MoneyTransaction> getCurrentWeekTransaction(Long userId, Integer weekYear) {
-        return moneyTransactionRepository.findByUserIdAndWeekYear(userId, weekYear);
-    }
-
-    public MoneyTransaction createMoneyTransaction(MoneyTransaction moneyTransaction) {
-
+    public MoneyTransaction create(MoneyTransaction moneyTransaction) {
         return moneyTransactionRepository.save(moneyTransaction);
     }
 
-    public MonthSpend getMonthSpend(Long userId, Integer monthYear) {
+    public List<MoneyTransaction> getCurrentWeekTransaction(Integer weekYear) {
+        Long userId = SecurityUtils.getCurrentLoginUserId();
+        return moneyTransactionRepository.findByUserIdAndWeekYear(userId, weekYear);
+    }
+
+    public MonthSpend calculateAndgetMonthSpend(Long userId, Integer monthYear) {
         List<MoneyTransaction> transactions = moneyTransactionRepository.findByUserIdAndYearMonth(userId, monthYear);
         MonthSpend monthSpend = new MonthSpend();
-
         transactions.stream().filter(MoneyTransaction::isSpending)
                 .forEach(monthSpend::addSpending);
 
