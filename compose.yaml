@@ -1,28 +1,87 @@
+#version: "3.9"
+
 services:
-  mongodb:
-    image: 'mongo:latest'
-    environment:
-      - 'MONGO_INITDB_DATABASE=mydatabase'
-      - 'MONGO_INITDB_ROOT_PASSWORD=secret'
-      - 'MONGO_INITDB_ROOT_USERNAME=root'
-    ports:
-      - '27017'
+#  app:
+#    build: .
+#    container_name: spendaste-be
+#    ports:
+#      - "8023:8023"
+#    environment:
+#      # PostgreSQL
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/daste?currentSchema=public
+#      SPRING_DATASOURCE_USERNAME: daste
+#      SPRING_DATASOURCE_PASSWORD: daste
+#      SPRING_JPA_HIBERNATE_DDL_AUTO: no
+#
+#      # MongoDB
+#      SPRING_DATA_MONGODB_URI: mongodb://daste:daste@mongodb:27017/daste
+#
+#      # RabbitMQ
+#      SPRING_RABBITMQ_HOST: rabbitmq
+#      SPRING_RABBITMQ_PORT: 5672
+#      SPRING_RABBITMQ_USERNAME: daste
+#      SPRING_RABBITMQ_PASSWORD: daste
+#
+#      # Redis
+#      SPRING_DATA_REDIS_HOST: redis
+#      SPRING_DATA_REDIS_PORT: 6379
+#
+#    depends_on:
+#      - postgres
+#      - mongodb
+#      - rabbitmq
+#      - redis
+
   postgres:
-    image: 'postgres:latest'
+    image: postgres:13.22-trixie
+    container_name: postgres-db
     environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+      POSTGRES_DB: daste
+      POSTGRES_USER: daste
+      POSTGRES_PASSWORD: daste
+      TZ: Asia/Ho_Chi_Minh
     ports:
-      - '5432'
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  mongodb:
+    image: mongo:6
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_DATABASE: daste
+      MONGO_INITDB_ROOT_USERNAME: daste
+      MONGO_INITDB_ROOT_PASSWORD: daste
+      TZ: Asia/Ho_Chi_Minh
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - mongodata:/data/db
+
   rabbitmq:
-    image: 'rabbitmq:latest'
+    image: rabbitmq:3-management
+    container_name: rabbitmq
     environment:
-      - 'RABBITMQ_DEFAULT_PASS=secret'
-      - 'RABBITMQ_DEFAULT_USER=myuser'
+      RABBITMQ_DEFAULT_USER: daste
+      RABBITMQ_DEFAULT_PASS: daste
+      TZ: Asia/Ho_Chi_Minh
     ports:
-      - '5672'
+      - "5672:5672"     # connection
+      - "15672:15672"   # management UI (http://localhost:15672)
+    volumes:
+      - ./rabbitmq-data:/var/lib/rabbitmq
+
   redis:
-    image: 'redis:latest'
+    image: redis:7
+    container_name: redis
     ports:
-      - '6379'
+      - "6379:6379"
+    volumes:
+      - ./data/redis:/data
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+
+volumes:
+  pgdata:
+  mongodata:

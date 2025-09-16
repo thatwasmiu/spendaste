@@ -3,6 +3,11 @@ package daste.spendaste.module.spend.repositories;
 import daste.spendaste.module.spend.entities.MonthBalance;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface MonthBalanceRepository extends JpaRepository<MonthBalance, Long> {
-    MonthBalance findByUserIdAndMonthYear(Long userId, Long monthYear);
+    Optional<MonthBalance> findByUserIdAndYearMonth(Long userId, int monthYear);
+
+    List<MonthBalance> findAllByUserId(Long userId);
 }

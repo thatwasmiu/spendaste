@@ -3,3 +3,21 @@ spring:
     name: spendaste
   profiles:
     active: dev
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info   # expose health and info endpoints
+
+  endpoint:
+    health:
+      show-details: always     # show detailed health info (UP/DOWN + mongo details)
+
+
+#logging:
+#  level:
+#    org.springframework: DEBUG
+#    org.springframework.jdbc: TRACE
+#    org.hibernate: DEBUG
+#    org.postgresql: DEBUG

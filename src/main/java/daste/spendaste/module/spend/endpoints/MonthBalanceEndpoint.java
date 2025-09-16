@@ -2,13 +2,10 @@ package daste.spendaste.module.spend.endpoints;
 
 import daste.spendaste.module.spend.entities.MonthBalance;
 import daste.spendaste.module.spend.services.MonthBalanceService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("sp/api/aaa")
+@RequestMapping("sp/api/month_balance")
 public class MonthBalanceEndpoint {
     private final MonthBalanceService monthBalanceService;
 
@@ -16,9 +13,20 @@ public class MonthBalanceEndpoint {
         this.monthBalanceService = monthBalanceService;
     }
 
-    @GetMapping("month_budget/{monthYear}")
-    public MonthBalance getMonthSpend(@PathVariable(value = "monthYear") Long monthYear) {
-        Long userId = 0L;
-        return monthBalanceService.getMonthBalance(userId, monthYear);
+    @GetMapping("{yearMonth}")
+    public MonthBalance getMonthBalance(@PathVariable(value = "yearMonth") Integer yearMonth) {
+        return monthBalanceService.getMonthBalance(yearMonth);
+    }
+
+    @GetMapping("calculate/{yearMonth}")
+    public MonthBalance calculateMonthBalance(@PathVariable(value = "yearMonth") Integer yearMonth) {
+        return monthBalanceService.calculateMonthBalance(yearMonth);
+    }
+
+    @GetMapping("init")
+    public void initMonthBalance(@RequestParam(value = "startMonth") Long yearMonth,
+                                 @RequestParam(value = "numberOfMonth", defaultValue = "36") Long numberOfMonth
+    ) {
+        monthBalanceService.initMonthBalances(yearMonth, numberOfMonth);
     }
 }

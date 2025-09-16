@@ -4,23 +4,40 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/daste?currentSchema=public
-    username: daste
-    password: daste
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/daste?currentSchema=public}
+    username: ${SPRING_DATASOURCE_USERNAME:daste}
+    password: ${SPRING_DATASOURCE_PASSWORD:daste}
   docker:
     compose:
-      enabled: false
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
-      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
-      - org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoConfiguration
+      enabled: false     # auto-manage containers
+      stop:
+        on-application-end: false
+#  autoconfigure:
+#    exclude:
+#      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+#      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
+#      - org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoConfiguration
+#      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      password: ${SPRING_DATA_REDIS_PASSWORD:daste}
+
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://daste:daste@localhost:27017/daste}
+
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    port: ${SPRING_RABBITMQ_PORT:5672}
+    username: ${SPRING_RABBITMQ_USERNAME:daste}
+    password: ${SPRING_RABBITMQ_PASSWORD:daste}
 
   jpa:
     show-sql: true  # use in dev mode
     open-in-view: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:none}
     properties:
       hibernate.id.new_generator_mappings: false
       hibernate.generate_statistics: false

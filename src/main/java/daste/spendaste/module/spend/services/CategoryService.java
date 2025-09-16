@@ -1,5 +1,6 @@
 package daste.spendaste.module.spend.services;
 
+import daste.spendaste.module.spend.entities.Category;
 import daste.spendaste.module.spend.repositories.CategoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -9,5 +10,10 @@ public class CategoryService {
 
     public CategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
+    }
+
+    public Category createCategory(Long userId, Category category) {
+
+        return null;
     }
 }
