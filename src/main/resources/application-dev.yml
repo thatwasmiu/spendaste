@@ -7,6 +7,8 @@ spring:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/daste?currentSchema=public}
     username: ${SPRING_DATASOURCE_USERNAME:daste}
     password: ${SPRING_DATASOURCE_PASSWORD:daste}
+#  cache:
+#    type: redis         # <-- enable Redis as Spring Cache backend, disabled if manual setup
   docker:
     compose:
       enabled: false     # auto-manage containers

@@ -19,4 +19,8 @@ public class MonthBudget {
     public MonthBudget(MonthSpend monthSpend) {
         this.budget = monthSpend.totalSpend();
     }
+
+    public boolean notAvailable() {
+        return budget == null;
+    }
 }

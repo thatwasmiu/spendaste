@@ -31,4 +31,9 @@ public class MoneyTransactionEndpoint {
     public MoneyTransaction createMoneyTransaction(@RequestBody MoneyTransaction MoneyTransaction) {
         return moneyTransactionService.create(MoneyTransaction);
     }
+
+    @PutMapping("update")
+    public MoneyTransaction update(@RequestBody MoneyTransaction MoneyTransaction) {
+        return moneyTransactionService.update(MoneyTransaction);
+    }
 }

@@ -22,11 +22,4 @@ public class MonthBalanceEndpoint {
     public MonthBalance calculateMonthBalance(@PathVariable(value = "yearMonth") Integer yearMonth) {
         return monthBalanceService.calculateMonthBalance(yearMonth);
     }
-
-    @GetMapping("init")
-    public void initMonthBalance(@RequestParam(value = "startMonth") Long yearMonth,
-                                 @RequestParam(value = "numberOfMonth", defaultValue = "36") Long numberOfMonth
-    ) {
-        monthBalanceService.initMonthBalances(yearMonth, numberOfMonth);
-    }
 }
