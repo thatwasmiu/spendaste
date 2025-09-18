@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.validation.annotation.Validated;
 
 import java.math.BigDecimal;
 
@@ -18,11 +19,13 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Validated
 public class MoneyTransaction extends BaseIdEntity {
 
     TransactionType type = TransactionType.INCOMING_PENDING;
     @NotNull
     Long userId;
+    @NotNull
     TransactionMethod method;
     @NotNull
     Long date;
