@@ -9,6 +9,8 @@ public class UserPrincipal extends User {
 
     private Long id;
 
+    private Long tenant;
+
     public UserPrincipal(Long id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
         this.id = id;
@@ -20,5 +22,13 @@ public class UserPrincipal extends User {
 
     public Long getId() {
         return id;
+    }
+
+    public Long getTenant() {
+        return tenant;
+    }
+
+    public void setTenant(Long tenant) {
+        this.tenant = tenant;
     }
 }

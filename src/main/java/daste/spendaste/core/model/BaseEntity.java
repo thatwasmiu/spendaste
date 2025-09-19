@@ -1,32 +1,27 @@
 package daste.spendaste.core.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
+import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
 
 @MappedSuperclass
 @JsonIgnoreProperties(ignoreUnknown = true)
-//@EntityListeners(AuditingListener.class)
-public class BaseEntity implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class BaseEntity extends TenantEntity implements Serializable {
+    @CreatedDate
     private Long created;
+    @LastModifiedDate
     private Long updated;
+    @CreatedBy
     private String createdBy;
+    @LastModifiedBy
     private String updatedBy;
-
-    @PrePersist
-    public void onCreate() {
-        long now = System.currentTimeMillis();
-        this.created = now;
-        this.updated = now;
-    }
-
-    @PreUpdate
-    public void onUpdate() {
-        this.updated = System.currentTimeMillis();
-    }
 
     public BaseEntity() {}
 

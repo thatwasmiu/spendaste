@@ -1,14 +1,19 @@
 package daste.spendaste.module.spend.services;
 
+import daste.spendaste.core.security.SecurityUtils;
 import daste.spendaste.module.spend.entities.MoneyTransaction;
 import daste.spendaste.module.spend.entities.MonthBalance;
 import daste.spendaste.module.spend.models.MonthBudget;
 import daste.spendaste.module.spend.models.MonthSpend;
 import daste.spendaste.module.spend.repositories.MoneyTransactionRepository;
 import daste.spendaste.module.spend.repositories.MonthBalanceRepository;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -21,27 +26,42 @@ public class BalanceCalculatorService {
         this.moneyTransactionRepository = moneyTransactionRepository;
     }
 
-    public MonthBalance calculate(Long userId, Integer monthYear) {
-        MonthBalance balance = monthBalanceRepository.findByUserIdAndYearMonth(userId, monthYear)
-                .orElse(initMonthBalance(userId, monthYear));
+    @CachePut(value = "monthBalance", keyGenerator = "tenantMonthBalance")
+    public MonthBalance calculate(Integer yearMonth) {
+        MonthBalance balance = monthBalanceRepository.findByYearMonth(yearMonth)
+                .orElse(initMonthBalance(SecurityUtils.getTenant(), yearMonth));
         initMonthSpend(balance);
-        if (balance.getMonthBudget().notAvailable()) {
+        if (Objects.nonNull(balance.getMonthBudget()) && balance.getMonthBudget().notAvailable()) {
             initMonthBudget(balance);
         }
-        return balance;
+        return monthBalanceRepository.save(balance);
     }
 
-    public MonthBalance initMonthBalance(Long userId, Integer monthYear) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @CachePut(value = "monthBalance", keyGenerator = "tenantMonthBalance")
+    public MonthBalance calculateNewTransaction(Integer yearMonth) {
+        return calculate(yearMonth);
+    }
+
+    @CachePut(value = "monthBalance", keyGenerator = "tenantMonthBalance")
+    public MonthBalance createBalance(Integer yearMonth) {
+        MonthBalance balance = initMonthBalance(SecurityUtils.getTenant(), yearMonth);
+        initMonthBudget(balance);
+        initMonthSpend(balance);
+        return monthBalanceRepository.save(balance);
+    }
+
+    public MonthBalance initMonthBalance(Long tenant, Integer monthYear) {
         MonthBalance monthBalance = new MonthBalance();
-        monthBalance.setMonthYearUser(Long.valueOf(monthYear + "" + userId));
+        monthBalance.setMonthYearUser(Long.valueOf(monthYear + "" + tenant));
         monthBalance.setYearMonth(monthYear);
-        monthBalance.setUserId(userId);
-        return monthBalanceRepository.save(monthBalance);
+        monthBalance.setUserId(SecurityUtils.getUserId());
+        return monthBalance;
     }
 
     public MonthBalance initMonthBudget(MonthBalance monthBalance) {
         int previousMonth = monthBalance.getYearMonthType().minusMonths(1).getMonthValue();
-        Optional<MonthBalance> optionalMonthBalance = monthBalanceRepository.findByUserIdAndYearMonth(monthBalance.getUserId(), previousMonth);
+        Optional<MonthBalance> optionalMonthBalance = monthBalanceRepository.findByYearMonth(previousMonth);
         optionalMonthBalance.ifPresent(
                 balance -> monthBalance.setMonthBudget(new MonthBudget(balance.getMonthSpend()))
         );
@@ -49,13 +69,13 @@ public class BalanceCalculatorService {
     }
 
     public MonthBalance initMonthSpend(MonthBalance monthBalance) {
-        MonthSpend monthSpend = calculateAndgetMonthSpend(monthBalance.getUserId(), monthBalance.getYearMonth());
+        MonthSpend monthSpend = calculateAndgetMonthSpend(monthBalance.getYearMonth());
         monthBalance.setMonthSpend(monthSpend);
         return monthBalance;
     }
 
-    public MonthSpend calculateAndgetMonthSpend(Long userId, Integer monthYear) {
-        List<MoneyTransaction> transactions = moneyTransactionRepository.findByUserIdAndYearMonth(userId, monthYear);
+    public MonthSpend calculateAndgetMonthSpend(Integer monthYear) {
+        List<MoneyTransaction> transactions = moneyTransactionRepository.findByYearMonth(monthYear);
         MonthSpend monthSpend = new MonthSpend();
         transactions.stream().filter(MoneyTransaction::isSpending)
                 .forEach(monthSpend::addSpending);

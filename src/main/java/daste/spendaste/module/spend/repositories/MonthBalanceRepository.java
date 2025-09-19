@@ -7,7 +7,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MonthBalanceRepository extends JpaRepository<MonthBalance, Long> {
-    Optional<MonthBalance> findByUserIdAndYearMonth(Long userId, int monthYear);
-
-    List<MonthBalance> findAllByUserId(Long userId);
+    Optional<MonthBalance> findByYearMonth(int monthYear);
 }

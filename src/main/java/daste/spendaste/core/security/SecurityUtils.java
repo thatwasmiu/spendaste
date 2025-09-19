@@ -1,7 +1,6 @@
 package daste.spendaste.core.security;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -11,17 +10,21 @@ public class SecurityUtils {
 
     public static UserPrincipal getCurrentLoginUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null ||authentication.getPrincipal() instanceof UserDetails)
+        if (authentication == null || !(authentication.getPrincipal() instanceof UserDetails))
             return new UserPrincipal(-1L, "internalSystem", "", Collections.emptyList());
         return (UserPrincipal) authentication.getPrincipal();
     }
 
-    public static Long getCurrentLoginUserId() {
+    public static Long getUserId() {
         return getCurrentLoginUser().getId();
     }
 
-    public static String getCurrentLoginUsername() {
+    public static String getUsername() {
         return getCurrentLoginUser().getUsername();
+    }
+
+    public static Long getTenant() {
+        return getCurrentLoginUser().getTenant();
     }
 
 }

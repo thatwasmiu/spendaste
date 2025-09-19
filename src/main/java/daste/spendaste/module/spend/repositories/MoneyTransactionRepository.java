@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface MoneyTransactionRepository extends JpaRepository<MoneyTransaction, Long> {
 
-    List<MoneyTransaction> findByUserIdAndWeekYear(Long userId, Integer weekYear);
+    List<MoneyTransaction> findByYearWeek(Integer yearWeek);
 
-    List<MoneyTransaction> findByUserIdAndYearMonth(Long userId, Integer monthYear);
+    List<MoneyTransaction> findByYearMonth(Integer monthYear);
 }

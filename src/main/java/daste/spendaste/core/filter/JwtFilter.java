@@ -1,5 +1,6 @@
-package daste.spendaste.core.security;
+package daste.spendaste.core.filter;
 
+import daste.spendaste.core.security.UserPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    public static final String SECRET = "rOPUR7rIArxPCkObIPcrsIQowzzQB/mMEJ1KI5zUF48BQTkWELVK65GK6+Z0FpLygfQc3iIh29fn981ikRDdPg==";
+    public static final String SECRET = "2Wt6NL1Zl/kgPUTySOfWZ9ARb/YEg12UByzrDVDLAvigByu1RHxXo4JIulnwdfvlxhSNRUJ1iqID8FDmEvaFnA==";
 
     Claims claims;
 
@@ -117,11 +118,14 @@ public class JwtFilter extends OncePerRequestFilter {
 
     public static void main(String[] args) {
         // 1. Generate a secure HS512 key (or load from config if you want fixed one)
-        SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+//        SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
         // print the Base64 key (you can save this in application.properties)
-        String base64Key = Encoders.BASE64.encode(key.getEncoded());
-        System.out.println("Secret Key (Base64): " + base64Key);
+//        String base64Key = Encoders.BASE64.encode(key.getEncoded());
+//        System.out.println("Secret Key (Base64): " + base64Key);
+        byte[] keyBytes = Decoders.BASE64.decode(SECRET);
+        Key key = Keys.hmacShaKeyFor(keyBytes);
+
 
         // 2. Set claims
         String subject = "dastemin";
@@ -131,8 +135,10 @@ public class JwtFilter extends OncePerRequestFilter {
         // 3. Build token
         String jwt = Jwts.builder()
                 .setSubject(subject)
+                .claim("tenant", 1)
+                .claim("id", 1)
                 .setExpiration(expiration)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .signWith(key)
                 .compact();
 
         System.out.println("JWT Token: " + jwt);

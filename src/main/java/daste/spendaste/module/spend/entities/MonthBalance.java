@@ -1,5 +1,6 @@
 package daste.spendaste.module.spend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import daste.spendaste.core.model.BaseEntity;
 import daste.spendaste.module.spend.models.MonthBudget;
 import daste.spendaste.module.spend.models.MonthSpend;
@@ -37,13 +38,12 @@ public class MonthBalance extends BaseEntity {
     @Embedded
     MonthSpend monthSpend;
 
+    @JsonIgnore
     public YearMonth getYearMonthType() {
 
         int year = Integer.parseInt(yearMonth.toString().substring(0, 4));
         int month = Integer.parseInt(yearMonth.toString().substring(4, 6));
 
-        YearMonth ym = YearMonth.of(year, month);
-
-        return ym;
+        return YearMonth.of(year, month);
     }
 }

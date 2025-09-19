@@ -8,7 +8,7 @@ import jakarta.persistence.MappedSuperclass;
 
 @MappedSuperclass
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class IdEntity {
+public class IdEntity extends TenantEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

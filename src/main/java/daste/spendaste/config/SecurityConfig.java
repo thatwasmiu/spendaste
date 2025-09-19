@@ -1,6 +1,7 @@
 package daste.spendaste.config;
 
-import daste.spendaste.core.security.JwtFilter;
+import daste.spendaste.core.filter.JwtFilter;
+import daste.spendaste.core.filter.TenantFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -23,14 +24,10 @@ import java.util.List;
 public class SecurityConfig {
 
     final String[] WHITE_LIST = new String[]{"/auth/welcome", "/auth/addNewUser", "/auth/generateToken"};
-    private final JwtFilter jwtFilter;
 
-    public SecurityConfig(JwtFilter jwtFilter) {
-        this.jwtFilter = jwtFilter;
-    }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, TenantFilter tenantFilter, JwtFilter jwtFilter) throws Exception {
         http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable) // disable CSRF if you want
@@ -43,6 +40,7 @@ public class SecurityConfig {
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(tenantFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable) // disable login form
                 .httpBasic(AbstractHttpConfigurer::disable); // disable basic auth
         return http.build();

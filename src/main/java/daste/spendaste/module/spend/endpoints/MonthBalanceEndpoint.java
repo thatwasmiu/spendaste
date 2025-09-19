@@ -5,7 +5,7 @@ import daste.spendaste.module.spend.services.MonthBalanceService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("sp/api/month_balance")
+@RequestMapping("sp/api/month-balance")
 public class MonthBalanceEndpoint {
     private final MonthBalanceService monthBalanceService;
 
@@ -15,7 +15,7 @@ public class MonthBalanceEndpoint {
 
     @GetMapping("{yearMonth}")
     public MonthBalance getMonthBalance(@PathVariable(value = "yearMonth") Integer yearMonth) {
-        return monthBalanceService.getMonthBalance(yearMonth);
+        return monthBalanceService.getOrCreateMonthBalance(yearMonth);
     }
 
     @GetMapping("calculate/{yearMonth}")

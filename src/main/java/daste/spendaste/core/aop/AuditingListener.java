@@ -1,4 +1,4 @@
-package daste.spendaste.core;
+package daste.spendaste.core.aop;
 
 import daste.spendaste.core.model.BaseEntity;
 import jakarta.persistence.PrePersist;

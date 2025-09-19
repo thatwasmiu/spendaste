@@ -1,8 +1,12 @@
 package daste.spendaste.config;
 
+import daste.spendaste.core.security.SecurityUtils;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
+import org.springframework.cache.interceptor.CacheOperationInvocationContext;
+import org.springframework.cache.interceptor.CacheResolver;
 import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +16,8 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 @Configuration
 @EnableCaching
@@ -27,12 +33,23 @@ public class CacheConfig {
         SimpleCacheManager cacheManager = new SimpleCacheManager();
         cacheManager.setCaches(Arrays.asList(
                 new ConcurrentMapCache("monthBalance"),
-                new ConcurrentMapCache("weekTransaction"),
-                redisManager.getCache("redisCache")
+                new ConcurrentMapCache("weekSpend"),
+                redisManager.getCache("weekTransaction")
         ));
 
         return cacheManager;
     }
+
+//    @Bean("tenantCacheResolver") // work with ConcurrentMapCacheManager (dynamic cache) only
+//    public CacheResolver tenantCacheResolver(CacheManager cacheManager) {
+//        return context -> {
+//            Long tenantId = SecurityUtils.getTenant();
+//
+//            return context.getOperation().getCacheNames().stream()
+//                    .map(name -> cacheManager.getCache(tenantId + ":" + name))
+//                    .toList();
+//        };
+//    }
 
 //    @Bean
 //    public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
@@ -63,5 +80,4 @@ public class CacheConfig {
 //    public CacheManager defaultCacheManager(RedisConnectionFactory connectionFactory) {
 //        return RedisCacheManager.builder(connectionFactory).build();
 //    }
-
 }

@@ -39,7 +39,7 @@ spring:
     show-sql: true  # use in dev mode
     open-in-view: false
     hibernate:
-      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:none}
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
     properties:
       hibernate.id.new_generator_mappings: false
       hibernate.generate_statistics: false
