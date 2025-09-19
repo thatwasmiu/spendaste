@@ -23,7 +23,7 @@ public class SecurityUtils {
         return getCurrentLoginUser().getUsername();
     }
 
-    public static Long getTenant() {
+    public static String getTenant() {
         return getCurrentLoginUser().getTenant();
     }
 

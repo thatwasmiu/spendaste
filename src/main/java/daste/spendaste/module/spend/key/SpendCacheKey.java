@@ -29,12 +29,12 @@ public class SpendCacheKey {
     }
 
     public String generateKey(Object... params) {
-        Long tenantId = SecurityUtils.getTenant();
+        String tenantId = SecurityUtils.getTenant();
         return tenantId + ":" + Arrays.deepToString(params);
     }
 
     public String generateKeyStr(Object value) {
-        Long tenantId = SecurityUtils.getTenant();
+        String tenantId = SecurityUtils.getTenant();
         return tenantId + ":" + value;
     }
 }

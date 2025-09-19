@@ -49,6 +49,7 @@ spring:
       hibernate.generate_statistics: false
       hibernate.cache.use_second_level_cache: false
       hibernate.cache.use_query_cache: false
+      hibernate.jdbc.time_zone: Asia/Ho_Chi_Minh
   servlet:
     multipart:
       max-file-size: 50MB

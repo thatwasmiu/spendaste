@@ -9,7 +9,7 @@ public class UserPrincipal extends User {
 
     private Long id;
 
-    private Long tenant;
+    private String tenant;
 
     public UserPrincipal(Long id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
@@ -24,11 +24,11 @@ public class UserPrincipal extends User {
         return id;
     }
 
-    public Long getTenant() {
+    public String getTenant() {
         return tenant;
     }
 
-    public void setTenant(Long tenant) {
+    public void setTenant(String tenant) {
         this.tenant = tenant;
     }
 }

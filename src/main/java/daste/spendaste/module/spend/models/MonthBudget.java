@@ -4,6 +4,7 @@ import jakarta.persistence.Embeddable;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Embeddable
@@ -11,7 +12,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MonthBudget {
+public class MonthBudget implements Serializable {
     BigDecimal budget;
     BigDecimal extraIncrease;
     String increaseReason;

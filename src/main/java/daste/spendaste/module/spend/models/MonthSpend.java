@@ -8,13 +8,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Embeddable
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class MonthSpend {
+public class MonthSpend implements Serializable {
     BigDecimal digitalSpend = BigDecimal.ZERO;
     BigDecimal cashSpend = BigDecimal.ZERO;
     BigDecimal lastMonthSpend = BigDecimal.ZERO;

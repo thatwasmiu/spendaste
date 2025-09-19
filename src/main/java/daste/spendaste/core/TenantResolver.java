@@ -12,7 +12,7 @@ import java.util.Map;
 public class TenantResolver implements CurrentTenantIdentifierResolver, HibernatePropertiesCustomizer {
     @Override
     public String resolveCurrentTenantIdentifier() {
-        Long tenant = SecurityUtils.getTenant();
+        String tenant = SecurityUtils.getTenant();
         if (tenant == null) {
             // fallback to default tenant ID
             return "-1";

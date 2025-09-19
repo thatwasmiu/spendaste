@@ -1,6 +1,7 @@
 package daste.spendaste.module.spend.endpoints;
 
 import daste.spendaste.module.spend.entities.MonthBalance;
+import daste.spendaste.module.spend.models.MonthBudget;
 import daste.spendaste.module.spend.services.MonthBalanceService;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,5 +22,10 @@ public class MonthBalanceEndpoint {
     @GetMapping("calculate/{yearMonth}")
     public MonthBalance calculateMonthBalance(@PathVariable(value = "yearMonth") Integer yearMonth) {
         return monthBalanceService.calculateMonthBalance(yearMonth);
+    }
+
+    @PutMapping("budget/{yearMonth}")
+    public MonthBalance updateMonthBudget(@PathVariable(value = "yearMonth") Integer yearMonth, @RequestBody MonthBudget budget) {
+        return monthBalanceService.updateMonthBudget(yearMonth, budget);
     }
 }

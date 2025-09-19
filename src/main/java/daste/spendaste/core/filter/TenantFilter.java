@@ -23,15 +23,15 @@ public class TenantFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-        String rawValue = request.getHeader("X-Tenant-ID");
-        if (rawValue != null) {
-            Long tenant = Long.valueOf(rawValue);
-            SecurityUtils.getCurrentLoginUser().setTenant(tenant);
+        String tenant = request.getHeader("X-Tenant-ID");
+        if (tenant == null) throw new NoTenantException();
+
+        SecurityUtils.getCurrentLoginUser().setTenant(tenant);
 //            Session session = entityManager.unwrap(Session.class);
 //            session.enableFilter("tenantFilter")
 //                    .setParameter("tenant", tenant);
 //            System.out.println("Session identity: " + System.identityHashCode(session));
-        }
+
         chain.doFilter(request, response);
     }
 }

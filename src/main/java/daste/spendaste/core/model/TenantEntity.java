@@ -1,5 +1,6 @@
 package daste.spendaste.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import daste.spendaste.core.security.SecurityUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
@@ -12,12 +13,13 @@ import org.hibernate.annotations.TenantId;
 public class TenantEntity {
     @Column(nullable = false, updatable = false)
     @TenantId
+    @JsonIgnore
     private String tenant;
 
-    @PrePersist
-    public void onCreate() {
-        this.tenant = SecurityUtils.getTenant().toString();
-    }
+//    @PrePersist
+//    public void onCreate() {
+//        this.tenant = SecurityUtils.getTenant();
+//    }
 
     public String getTenant() {
         return tenant;

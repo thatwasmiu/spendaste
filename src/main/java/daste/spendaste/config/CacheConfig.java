@@ -32,9 +32,9 @@ public class CacheConfig {
         // Create SimpleCacheManager and register both types of caches
         SimpleCacheManager cacheManager = new SimpleCacheManager();
         cacheManager.setCaches(Arrays.asList(
-                new ConcurrentMapCache("monthBalance"),
+//                new ConcurrentMapCache("monthBalance"),
                 new ConcurrentMapCache("weekSpend"),
-                redisManager.getCache("weekTransaction")
+                redisManager.getCache("monthBalance")
         ));
 
         return cacheManager;
@@ -79,5 +79,49 @@ public class CacheConfig {
 //    @Bean
 //    public CacheManager defaultCacheManager(RedisConnectionFactory connectionFactory) {
 //        return RedisCacheManager.builder(connectionFactory).build();
+//    }
+
+//    @Bean
+//    public CacheManager defaultCacheManager(RedisConnectionFactory factory) {
+//        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+//                .serializeValuesWith(
+//                        RedisSerializationContext.SerializationPair.fromSerializer(new JdkSerializationRedisSerializer())
+//                );
+//        return RedisCacheManager.builder(factory).cacheDefaults(config).build();
+//    }
+//
+//    @Bean
+//    public CacheManager jsonCacheManager(RedisConnectionFactory factory) {
+//        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+//                .serializeValuesWith(
+//                        RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
+//                );
+//        return RedisCacheManager.builder(factory).cacheDefaults(config).build();
+//    }
+
+
+//    @Bean
+//    public CacheManager binaryRedisCacheManager(RedisConnectionFactory factory) {
+//        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+//                .serializeValuesWith(
+//                        RedisSerializationContext.SerializationPair.fromSerializer(new JdkSerializationRedisSerializer())
+//                );
+//        return RedisCacheManager.builder(factory).cacheDefaults(config).build();
+//    }
+//
+//    @Bean
+//    public CacheManager jsonRedisCacheManager(RedisConnectionFactory factory) {
+//        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+//                .serializeValuesWith(
+//                        RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
+//                );
+//        return RedisCacheManager.builder(factory).cacheDefaults(config).build();
+//    }
+//
+//    @Bean
+//    public CacheManager simpleCacheManager() {
+//        SimpleCacheManager manager = new SimpleCacheManager();
+//        manager.setCaches(Arrays.asList(new ConcurrentMapCache("weekSpend")));
+//        return manager;
 //    }
 }

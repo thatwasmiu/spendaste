@@ -29,7 +29,7 @@ public class BalanceCalculatorService {
     @CachePut(value = "monthBalance", keyGenerator = "tenantMonthBalance")
     public MonthBalance calculate(Integer yearMonth) {
         MonthBalance balance = monthBalanceRepository.findByYearMonth(yearMonth)
-                .orElse(initMonthBalance(SecurityUtils.getTenant(), yearMonth));
+                .orElse(initMonthBalance(yearMonth));
         initMonthSpend(balance);
         if (Objects.nonNull(balance.getMonthBudget()) && balance.getMonthBudget().notAvailable()) {
             initMonthBudget(balance);
@@ -45,15 +45,15 @@ public class BalanceCalculatorService {
 
     @CachePut(value = "monthBalance", keyGenerator = "tenantMonthBalance")
     public MonthBalance createBalance(Integer yearMonth) {
-        MonthBalance balance = initMonthBalance(SecurityUtils.getTenant(), yearMonth);
+        MonthBalance balance = initMonthBalance(yearMonth);
         initMonthBudget(balance);
         initMonthSpend(balance);
         return monthBalanceRepository.save(balance);
     }
 
-    public MonthBalance initMonthBalance(Long tenant, Integer monthYear) {
+    public MonthBalance initMonthBalance(Integer monthYear) {
         MonthBalance monthBalance = new MonthBalance();
-        monthBalance.setMonthYearUser(Long.valueOf(monthYear + "" + tenant));
+        monthBalance.setMonthYearUser(Long.valueOf(monthYear + SecurityUtils.getTenant()));
         monthBalance.setYearMonth(monthYear);
         monthBalance.setUserId(SecurityUtils.getUserId());
         return monthBalance;
