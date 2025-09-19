@@ -17,8 +17,8 @@ import java.io.IOException;
 @Component
 public class TenantFilter extends OncePerRequestFilter {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+//    @PersistenceContext
+//    private EntityManager entityManager;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -27,9 +27,10 @@ public class TenantFilter extends OncePerRequestFilter {
         if (rawValue != null) {
             Long tenant = Long.valueOf(rawValue);
             SecurityUtils.getCurrentLoginUser().setTenant(tenant);
-            Session session = entityManager.unwrap(Session.class);
-            session.enableFilter("tenantFilter")
-                    .setParameter("tenant", tenant);
+//            Session session = entityManager.unwrap(Session.class);
+//            session.enableFilter("tenantFilter")
+//                    .setParameter("tenant", tenant);
+//            System.out.println("Session identity: " + System.identityHashCode(session));
         }
         chain.doFilter(request, response);
     }

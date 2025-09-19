@@ -4,27 +4,26 @@ import daste.spendaste.core.security.SecurityUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.TenantId;
 
 @MappedSuperclass
-@FilterDef(name = "tenantFilter", parameters = @ParamDef(name = "tenant", type = Long.class))
-@Filter(name = "tenantFilter", condition = "tenant = :tenant")
+//@FilterDef(name = "tenantFilter", parameters = @ParamDef(name = "tenant", type = Long.class))
+//@Filter(name = "tenantFilter", condition = "tenant = :tenant")
 public class TenantEntity {
     @Column(nullable = false, updatable = false)
-    private Long tenant;
+    @TenantId
+    private String tenant;
 
     @PrePersist
     public void onCreate() {
-        this.tenant = SecurityUtils.getTenant();
+        this.tenant = SecurityUtils.getTenant().toString();
     }
 
-    public Long getTenant() {
+    public String getTenant() {
         return tenant;
     }
 
-    public void setTenant(Long tenant) {
+    public void setTenant(String tenant) {
         this.tenant = tenant;
     }
 }

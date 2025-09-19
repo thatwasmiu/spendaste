@@ -40,6 +40,10 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+#      properties:
+#        hibernate:
+#          multiTenancy: DISCRIMINATOR
+#          tenant_identifier_resolver: daste.spendaste.core.TenantResolver
     properties:
       hibernate.id.new_generator_mappings: false
       hibernate.generate_statistics: false

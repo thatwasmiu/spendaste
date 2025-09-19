@@ -17,6 +17,15 @@ management:
 
 #logging:
 #  level:
+#    org:
+#      hibernate:
+#        engine:
+#          internal: DEBUG
+#        SQL: DEBUG
+#        type:
+#          descriptor:
+#            sql:
+#              BasicBinder: TRACE
 #    org.springframework: DEBUG
 #    org.springframework.jdbc: TRACE
 #    org.hibernate: DEBUG
