@@ -21,6 +21,7 @@ public class BalanceCalculateListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handle(BalanceCalculateEvent event) {
+        System.out.println("Consumer thread: " + Thread.currentThread().getName());
         balanceCalculatorService.calculateNewTransaction(event.getYearMonth());
     }
 }

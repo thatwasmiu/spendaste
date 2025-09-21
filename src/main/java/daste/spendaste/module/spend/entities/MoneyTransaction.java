@@ -7,15 +7,16 @@ import daste.spendaste.module.spend.enums.TransactionMethod;
 import daste.spendaste.module.spend.enums.TransactionType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.validation.annotation.Validated;
 
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
 
 @Entity
@@ -42,17 +43,59 @@ public class MoneyTransaction extends BaseIdEntity {
     BigDecimal amount;
     Long categoryId;
 
-    public void setDate(Long date) {
+    public void setDate(@NotNull Long date) {
         this.date = date;
         ZoneId zone = ZoneId.systemDefault();
-        LocalDateTime dateTime = Instant.ofEpochMilli(date).atZone(zone).toLocalDateTime();
+        LocalDate localDate = Instant.ofEpochMilli(date).atZone(zone).toLocalDate();
+
         // YearMonth as Integer (yyyyMM)
-        this.yearMonth = dateTime.getYear() * 100 + dateTime.getMonthValue();
-        // YearWeek as Integer (yyyyWW)
-        WeekFields weekFields = WeekFields.ISO; // ISO week numbering
-        int weekYear = dateTime.get(weekFields.weekBasedYear());
-        int weekOfYear = dateTime.get(weekFields.weekOfWeekBasedYear());
-        this.yearWeek = weekYear * 100 + weekOfYear;
+        this.yearMonth = localDate.getYear() * 100 + localDate.getMonthValue();
+
+        // Calendar-year week (weeks start on Monday)
+        // Find the first Monday of the year
+        LocalDate firstMonday = LocalDate.of(localDate.getYear(), 1, 1)
+                .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+
+        long daysSinceFirstMonday = ChronoUnit.DAYS.between(firstMonday, localDate);
+        int weekOfYear = (int) (daysSinceFirstMonday / 7) + 1;
+
+        this.yearWeek = localDate.getYear() * 100 + weekOfYear;
+    }
+
+    public static void main(String[] args) {
+        Long date = 1798637837000L;
+
+        ZoneId zone = ZoneId.systemDefault();
+        LocalDate localDate = Instant.ofEpochMilli(date).atZone(zone).toLocalDate();
+
+        // YearMonth as Integer (yyyyMM)
+        System.out.println(localDate.getYear() * 100 + localDate.getMonthValue());
+        // Calendar-year week (weeks start on Monday)
+        // Find the first Monday of the year
+        LocalDate firstMonday = LocalDate.of(localDate.getYear(), 1, 1)
+                .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+
+        long daysSinceFirstMonday = ChronoUnit.DAYS.between(firstMonday, localDate);
+        System.out.println(daysSinceFirstMonday);
+        int weekOfYear = (int) (daysSinceFirstMonday / 7) + 1;
+
+        System.out.println(localDate.getYear() * 100 + weekOfYear);
+    }
+
+    @JsonIgnore
+    @Transient
+    public Integer getDayOfWeek() {
+        Instant instant = Instant.ofEpochMilli(date);
+
+        // Apply time zone (important!)
+        ZonedDateTime dateTime = instant.atZone(ZoneId.systemDefault());
+
+        // Get DayOfWeek
+        DayOfWeek dayOfWeek = dateTime.getDayOfWeek();
+
+        // As number (1=Monday, 7=Sunday)
+
+        return dayOfWeek.getValue();
     }
 
     @JsonIgnore

@@ -1,36 +1,36 @@
 #version: "3.9"
 
 services:
-#  app:
-#    build: .
-#    container_name: spendaste-be
-#    ports:
-#      - "8023:8023"
-#    environment:
-#      # PostgreSQL
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/daste?currentSchema=public
-#      SPRING_DATASOURCE_USERNAME: daste
-#      SPRING_DATASOURCE_PASSWORD: daste
-#      SPRING_JPA_HIBERNATE_DDL_AUTO: no
-#
-#      # MongoDB
-#      SPRING_DATA_MONGODB_URI: mongodb://daste:daste@mongodb:27017/daste
-#
-#      # RabbitMQ
-#      SPRING_RABBITMQ_HOST: rabbitmq
-#      SPRING_RABBITMQ_PORT: 5672
-#      SPRING_RABBITMQ_USERNAME: daste
-#      SPRING_RABBITMQ_PASSWORD: daste
-#
-#      # Redis
-#      SPRING_DATA_REDIS_HOST: redis
-#      SPRING_DATA_REDIS_PORT: 6379
-#
-#    depends_on:
-#      - postgres
-#      - mongodb
-#      - rabbitmq
-#      - redis
+  app:
+    build: .
+    container_name: spendaste-be
+    ports:
+      - "8023:8023"
+    environment:
+      # PostgreSQL
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/daste?currentSchema=public
+      SPRING_DATASOURCE_USERNAME: daste
+      SPRING_DATASOURCE_PASSWORD: daste
+      SPRING_JPA_HIBERNATE_DDL_AUTO: none
+
+      # MongoDB
+      SPRING_DATA_MONGODB_URI: mongodb://daste:daste@mongodb:27017/daste
+
+      # RabbitMQ
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: daste
+      SPRING_RABBITMQ_PASSWORD: daste
+
+      # Redis
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+
+    depends_on:
+      - postgres
+      - mongodb
+      - rabbitmq
+      - redis
 
   postgres:
     image: postgres:13.22-trixie

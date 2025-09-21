@@ -5,6 +5,7 @@ import daste.spendaste.module.spend.listener.BalanceCalculateEvent;
 import daste.spendaste.module.spend.models.WeekSpend;
 import daste.spendaste.module.spend.repositories.MoneyTransactionRepository;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -27,17 +28,19 @@ public class MoneyTransactionService {
     }
 
     @Transactional
-    @Cacheable(value = "weekSpend", keyGenerator = "tenantWeekSpend")
+    @CacheEvict(value = "weekSpend", keyGenerator = "tenantWeekSpendTransaction")
     public MoneyTransaction create(MoneyTransaction moneyTransaction) {
         MoneyTransaction transaction = moneyTransactionRepository.save(moneyTransaction);
         applicationEventPublisher.publishEvent(new BalanceCalculateEvent(transaction.getYearMonth()));
+        System.out.println("Publisher thread: " + Thread.currentThread().getName());
         return transaction;
     }
 
     @Cacheable(value = "weekSpend", keyGenerator = "tenantWeekSpend")
     public WeekSpend getWeekSpend(Integer yearWeek) {
         List<MoneyTransaction> transactions = moneyTransactionRepository.findByYearWeek(yearWeek);
-        return new WeekSpend(transactions);
+
+        return new WeekSpend(yearWeek, transactions);
     }
 
     @Transactional
