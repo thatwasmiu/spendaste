@@ -26,7 +26,7 @@ public class BalanceCalculatorService {
         this.moneyTransactionRepository = moneyTransactionRepository;
     }
 
-    @CachePut(value = "monthBalance", keyGenerator = "tenantMonthBalance")
+//    @CachePut(value = "monthBalance", keyGenerator = "tenantMonthBalance")
     public MonthBalance calculate(Integer yearMonth) {
         MonthBalance balance = monthBalanceRepository.findByYearMonth(yearMonth)
                 .orElse(initMonthBalance(yearMonth));
@@ -38,12 +38,12 @@ public class BalanceCalculatorService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @CachePut(value = "monthBalance", keyGenerator = "tenantMonthBalance")
+//    @CachePut(value = "monthBalance", keyGenerator = "tenantMonthBalance")
     public MonthBalance calculateNewTransaction(Integer yearMonth) {
         return calculate(yearMonth);
     }
 
-    @CachePut(value = "monthBalance", keyGenerator = "tenantMonthBalance")
+//    @CachePut(value = "monthBalance", keyGenerator = "tenantMonthBalance")
     public MonthBalance createBalance(Integer yearMonth) {
         MonthBalance balance = initMonthBalance(yearMonth);
         initMonthBudget(balance);

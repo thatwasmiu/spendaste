@@ -20,7 +20,7 @@ public class MonthBalanceService {
         this.monthBalanceRepository = monthBalanceRepository;
     }
 
-    @Cacheable(value = "monthBalance", keyGenerator = "tenantMonthBalance")
+//    @Cacheable(value = "monthBalance", keyGenerator = "tenantMonthBalance")
     public MonthBalance getOrCreateMonthBalance(Integer yearMonth) {
         return monthBalanceRepository.findByYearMonth(yearMonth)
                 .orElseGet(() -> calculatorService.createBalance(yearMonth));
@@ -30,7 +30,7 @@ public class MonthBalanceService {
         return calculatorService.calculate(monthYear);
     }
 
-    @CachePut(value = "monthBalance", keyGenerator = "tenantMonthBalance")
+//    @CachePut(value = "monthBalance", keyGenerator = "tenantMonthBalance")
     public MonthBalance updateMonthBudget(Integer yearMonth, MonthBudget budget) {
         MonthBalance balance = monthBalanceRepository.findByYearMonth(yearMonth)
                 .orElseGet(() -> calculatorService.createBalance(yearMonth));

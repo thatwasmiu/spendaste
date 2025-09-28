@@ -14,12 +14,7 @@ spring:
       enabled: false     # auto-manage containers
       stop:
         on-application-end: false
-#  autoconfigure:
-#    exclude:
-#      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
-#      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
-#      - org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoConfiguration
-#      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
+
   data:
     redis:
       host: ${SPRING_DATA_REDIS_HOST:localhost}
