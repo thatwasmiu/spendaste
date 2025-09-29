@@ -21,10 +21,18 @@ public class SpendCacheKey {
     }
 
     @Bean("tenantWeekSpendTransaction")
-    public KeyGenerator tenantTransaction() {
+    public KeyGenerator tenantWeekSpendTransaction() {
         return (target, method, params) -> {
             Integer yearWeek = ((MoneyTransaction) params[0]).getYearWeek();
             return generateKeyStr(yearWeek);
+        };
+    }
+
+    @Bean("tenantMonthBalanceTransaction")
+    public KeyGenerator tenantMonthBalanceTransaction() {
+        return (target, method, params) -> {
+            Integer yearMonth = ((MoneyTransaction) params[0]).getYearMonth();
+            return generateKeyStr(yearMonth);
         };
     }
 

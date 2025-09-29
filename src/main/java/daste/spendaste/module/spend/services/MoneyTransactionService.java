@@ -7,6 +7,7 @@ import daste.spendaste.module.spend.repositories.MoneyTransactionRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +45,10 @@ public class MoneyTransactionService {
     }
 
     @Transactional
-    @CacheEvict(value = "weekSpend", allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = "weekSpend", keyGenerator = "tenantWeekSpendTransaction"),
+            @CacheEvict(value = "monthBalance", keyGenerator = "tenantMonthBalanceTransaction")
+    })
     public MoneyTransaction update(MoneyTransaction moneyTransaction) {
         MoneyTransaction transaction = moneyTransactionRepository.save(moneyTransaction);
         applicationEventPublisher.publishEvent(new BalanceCalculateEvent(transaction.getYearMonth()));

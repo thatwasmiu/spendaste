@@ -52,8 +52,10 @@ public class WeekSpend {
         transactions.forEach(transaction -> {
             DaySpend daySpend = daySpendMap.get(transaction.getDayOfWeek());
             daySpend.addSpending(transaction);
+        });
+        daySpendMap.values().forEach(daySpend -> {
             this.cashSpend = this.cashSpend.add(daySpend.getCashSpend());
-            this.digitalSpend = this.cashSpend.add(daySpend.getDigitalSpend());
+            this.digitalSpend = this.digitalSpend.add(daySpend.getDigitalSpend());
         });
     }
 

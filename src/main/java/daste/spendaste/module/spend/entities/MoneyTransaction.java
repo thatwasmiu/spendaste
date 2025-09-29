@@ -37,9 +37,9 @@ public class MoneyTransaction extends BaseIdEntity {
     @NotNull
     Long date;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Integer yearMonth;
+    Integer yearMonth;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Integer yearWeek;
+    Integer yearWeek;
     BigDecimal amount;
     Long categoryId;
 
@@ -48,14 +48,9 @@ public class MoneyTransaction extends BaseIdEntity {
         ZoneId zone = ZoneId.systemDefault();
         LocalDate localDate = Instant.ofEpochMilli(date).atZone(zone).toLocalDate();
 
-        // YearMonth as Integer (yyyyMM)
         this.yearMonth = localDate.getYear() * 100 + localDate.getMonthValue();
-
-        // Calendar-year week (weeks start on Monday)
-        // Find the first Monday of the year
         LocalDate firstMonday = LocalDate.of(localDate.getYear(), 1, 1)
                 .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-
         long daysSinceFirstMonday = ChronoUnit.DAYS.between(firstMonday, localDate);
         int weekOfYear = (int) (daysSinceFirstMonday / 7) + 1;
 
@@ -86,15 +81,8 @@ public class MoneyTransaction extends BaseIdEntity {
     @Transient
     public Integer getDayOfWeek() {
         Instant instant = Instant.ofEpochMilli(date);
-
-        // Apply time zone (important!)
         ZonedDateTime dateTime = instant.atZone(ZoneId.systemDefault());
-
-        // Get DayOfWeek
         DayOfWeek dayOfWeek = dateTime.getDayOfWeek();
-
-        // As number (1=Monday, 7=Sunday)
-
         return dayOfWeek.getValue();
     }
 
