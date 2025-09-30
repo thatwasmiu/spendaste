@@ -7,6 +7,9 @@ services:
     ports:
       - "8023:8023"
     environment:
+      TZ: Asia/Ho_Chi_Minh
+      JAVA_TOOL_OPTIONS: "-Duser.timezone=Asia/Ho_Chi_Minh"
+
       # PostgreSQL
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/daste?currentSchema=public
       SPRING_DATASOURCE_USERNAME: daste
