@@ -23,7 +23,7 @@ import java.util.List;
 @EnableCaching
 public class CacheConfig {
 
-    @Bean
+//    @Bean
     public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         // Create RedisCacheManager first
         RedisCacheManager redisManager = RedisCacheManager.builder(redisConnectionFactory)
