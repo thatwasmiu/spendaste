@@ -28,4 +28,9 @@ public class MonthBalanceEndpoint {
     public MonthBalance updateMonthBudget(@PathVariable(value = "yearMonth") Integer yearMonth, @RequestBody MonthBudget budget) {
         return monthBalanceService.updateMonthBudget(yearMonth, budget);
     }
+
+    @PostMapping("update")
+    public MonthBalance update(@RequestBody MonthBalance monthBalance) {
+        return monthBalanceService.updateMonthBalance(monthBalance);
+    }
 }

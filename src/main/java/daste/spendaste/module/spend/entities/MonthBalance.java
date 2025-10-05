@@ -45,6 +45,16 @@ public class MonthBalance extends BaseEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     List<Integer> weekOfMonth;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    public BigDecimal currentCash() {
+        return cashBalance.subtract(monthSpend.getCashSpend());
+    }
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    public BigDecimal currentDigital() {
+        return digitalBalance.subtract(monthSpend.getDigitalSpend());
+    }
+
     @JsonIgnore
     public YearMonth getYearMonthType() {
 
