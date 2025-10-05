@@ -37,4 +37,9 @@ public class MonthBalanceService {
         balance.setMonthBudget(budget);
         return balance;
     }
+
+    @CachePut(value = "monthBalance", keyGenerator = "tenantMonthBalanceObject")
+    public MonthBalance updateMonthBalance(MonthBalance monthBalance) {
+        return monthBalanceRepository.save(monthBalance);
+    }
 }

@@ -2,6 +2,7 @@ package daste.spendaste.module.spend.key;
 
 import daste.spendaste.core.security.SecurityUtils;
 import daste.spendaste.module.spend.entities.MoneyTransaction;
+import daste.spendaste.module.spend.entities.MonthBalance;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +33,14 @@ public class SpendCacheKey {
     public KeyGenerator tenantMonthBalanceTransaction() {
         return (target, method, params) -> {
             Integer yearMonth = ((MoneyTransaction) params[0]).getYearMonth();
+            return generateKeyStr(yearMonth);
+        };
+    }
+
+    @Bean("tenantMonthBalanceObject")
+    public KeyGenerator tenantMonthBalance() {
+        return (target, method, params) -> {
+            Integer yearMonth = ((MonthBalance) params[0]).getYearMonth();
             return generateKeyStr(yearMonth);
         };
     }
