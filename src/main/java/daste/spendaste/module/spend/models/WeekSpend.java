@@ -2,6 +2,7 @@ package daste.spendaste.module.spend.models;
 
 import daste.spendaste.module.spend.entities.MoneyTransaction;
 import daste.spendaste.module.spend.enums.TransactionMethod;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
@@ -15,18 +16,21 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class WeekSpend {
-    private final Collection<DaySpend> daySpends;
+    private final Collection<DayTransaction> dayTransactions;
     private BigDecimal cashSpend = BigDecimal.ZERO;
     private BigDecimal digitalSpend = BigDecimal.ZERO;
+    private BigDecimal digitalReceive = BigDecimal.ZERO;
+    private BigDecimal cashReceive = BigDecimal.ZERO;
 
     public WeekSpend(Integer yearWeek, List<MoneyTransaction> transactions) {
-        Map<Integer, DaySpend> daySpendMap = getDaySpendMap(yearWeek);
+        Map<Integer, DayTransaction> daySpendMap = getDaySpendMap(yearWeek);
         setSpending(transactions, daySpendMap);
-        daySpends = daySpendMap.values();
+        dayTransactions = daySpendMap.values();
     }
 
-    private Map<Integer, DaySpend> getDaySpendMap(Integer yearWeek) {
+    private Map<Integer, DayTransaction> getDaySpendMap(Integer yearWeek) {
         int year = yearWeek / 100;
         int week = yearWeek % 100;
 
@@ -42,32 +46,22 @@ public class WeekSpend {
                                 DayOfWeek::getValue,
                                 d -> {
                                     LocalDate date = firstDayOfWeek.plusDays(d.getValue() - 1);
-                                    return new DaySpend(date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli());
+                                    return new DayTransaction(date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli());
                                 },
                                 (a, b) -> a, LinkedHashMap::new
                         ));
     }
 
-    private void setSpending(List<MoneyTransaction> transactions, Map<Integer, DaySpend> daySpendMap) {
+    private void setSpending(List<MoneyTransaction> transactions, Map<Integer, DayTransaction> dayTransactionMap) {
         transactions.forEach(transaction -> {
-            DaySpend daySpend = daySpendMap.get(transaction.getDayOfWeek());
-            daySpend.addSpending(transaction);
+            DayTransaction dayTransaction = dayTransactionMap.get(transaction.getDayOfWeek());
+            dayTransaction.doTransaction(transaction);
         });
-        daySpendMap.values().forEach(daySpend -> {
-            this.cashSpend = this.cashSpend.add(daySpend.getCashSpend());
-            this.digitalSpend = this.digitalSpend.add(daySpend.getDigitalSpend());
+        dayTransactionMap.values().forEach(dayTransaction -> {
+            this.cashSpend = this.cashSpend.add(dayTransaction.getCashSpend());
+            this.digitalSpend = this.digitalSpend.add(dayTransaction.getDigitalSpend());
+            this.cashReceive = this.cashReceive.add(dayTransaction.getCashReceive());
+            this.digitalReceive = this.digitalReceive.add(dayTransaction.getDigitalReceive());
         });
-    }
-
-    public Collection<DaySpend> getDaySpends() {
-        return daySpends;
-    }
-
-    public BigDecimal getCashSpend() {
-        return cashSpend;
-    }
-
-    public BigDecimal getDigitalSpend() {
-        return digitalSpend;
     }
 }

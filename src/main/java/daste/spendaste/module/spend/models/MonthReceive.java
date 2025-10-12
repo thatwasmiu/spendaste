@@ -15,26 +15,25 @@ import java.math.BigDecimal;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class MonthSpend implements IMonthTransaction, Serializable {
-    BigDecimal digitalSpend = BigDecimal.ZERO;
-    BigDecimal cashSpend = BigDecimal.ZERO;
-    BigDecimal lastMonthSpend = BigDecimal.ZERO;
+public class MonthReceive  implements IMonthTransaction, Serializable {
+    BigDecimal digitalReceive = BigDecimal.ZERO;
 
-    private void addSpending(MoneyTransaction transaction) {
+    BigDecimal cashReceive = BigDecimal.ZERO;
+
+    private void addReceiving(MoneyTransaction transaction) {
         if (TransactionMethod.CASH.equals(transaction.getMethod())) {
-            this.cashSpend = this.cashSpend.add(transaction.getAmount());
+            this.cashReceive = this.cashReceive.add(transaction.getAmount());
         } else {
-            this.digitalSpend = this.digitalSpend.add(transaction.getAmount());
+            this.digitalReceive = this.digitalReceive.add(transaction.getAmount());
         }
-
     }
 
-    public BigDecimal totalSpend() {
-        return cashSpend.add(digitalSpend);
+    public BigDecimal totalReceive() {
+        return cashReceive.add(digitalReceive);
     }
 
     @Override
     public void doTransaction(MoneyTransaction transaction) {
-        this.addSpending(transaction);
+        this.addReceiving(transaction);
     }
 }

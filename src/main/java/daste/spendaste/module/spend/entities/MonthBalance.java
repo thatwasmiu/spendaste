@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import daste.spendaste.core.model.BaseEntity;
 import daste.spendaste.module.spend.models.MonthBudget;
+import daste.spendaste.module.spend.models.MonthReceive;
 import daste.spendaste.module.spend.models.MonthSpend;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -41,18 +42,22 @@ public class MonthBalance extends BaseEntity {
     MonthBudget monthBudget;
     @Embedded
     MonthSpend monthSpend;
+
+    @Embedded
+    MonthReceive monthReceive;
+
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JdbcTypeCode(SqlTypes.JSON)
     List<Integer> weekOfMonth;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public BigDecimal currentCash() {
-        return cashBalance.subtract(monthSpend.getCashSpend());
+        return cashBalance.add(monthReceive.getCashReceive()).subtract(monthSpend.getCashSpend());
     }
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public BigDecimal currentDigital() {
-        return digitalBalance.subtract(monthSpend.getDigitalSpend());
+        return digitalBalance.add(monthReceive.getDigitalReceive()).subtract(monthSpend.getDigitalSpend());
     }
 
     @JsonIgnore
