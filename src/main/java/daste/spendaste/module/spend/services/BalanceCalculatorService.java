@@ -3,7 +3,9 @@ package daste.spendaste.module.spend.services;
 import daste.spendaste.core.security.SecurityUtils;
 import daste.spendaste.module.spend.entities.MoneyTransaction;
 import daste.spendaste.module.spend.entities.MonthBalance;
+import daste.spendaste.module.spend.enums.TransactionType;
 import daste.spendaste.module.spend.models.MonthBudget;
+import daste.spendaste.module.spend.models.MonthReceive;
 import daste.spendaste.module.spend.models.MonthSpend;
 import daste.spendaste.module.spend.repositories.MoneyTransactionRepository;
 import daste.spendaste.module.spend.repositories.MonthBalanceRepository;
@@ -31,6 +33,7 @@ public class BalanceCalculatorService {
         MonthBalance balance = monthBalanceRepository.findByYearMonth(yearMonth)
                 .orElse(initMonthBalance(yearMonth));
         initMonthSpend(balance);
+        initMonthReceive(balance);
         if (Objects.nonNull(balance.getMonthBudget()) && balance.getMonthBudget().notAvailable()) {
             initMonthBudget(balance);
         }
@@ -48,6 +51,7 @@ public class BalanceCalculatorService {
         MonthBalance balance = initMonthBalance(yearMonth);
         initMonthBudget(balance);
         initMonthSpend(balance);
+        initMonthReceive(balance);
         return monthBalanceRepository.save(balance);
     }
 
@@ -74,11 +78,23 @@ public class BalanceCalculatorService {
         return monthBalance;
     }
 
+    public MonthBalance initMonthReceive(MonthBalance monthBalance) {
+        MonthReceive monthReceive = calculateAndgetMonthReceive(monthBalance.getYearMonth());
+        monthBalance.setMonthReceive(monthReceive);
+        return monthBalance;
+    }
+
+    private MonthReceive calculateAndgetMonthReceive(Integer yearMonth) {
+        List<MoneyTransaction> transactions = moneyTransactionRepository.findByYearMonthAndTypeIn(yearMonth, TransactionType.receivingTypes());
+        MonthReceive monthReceive = new MonthReceive();
+        transactions.forEach(monthReceive::doTransaction);
+        return monthReceive;
+    }
+
     public MonthSpend calculateAndgetMonthSpend(Integer monthYear) {
-        List<MoneyTransaction> transactions = moneyTransactionRepository.findByYearMonth(monthYear);
+        List<MoneyTransaction> transactions = moneyTransactionRepository.findByYearMonthAndTypeIn(monthYear, TransactionType.spendingTypes());
         MonthSpend monthSpend = new MonthSpend();
-        transactions.stream().filter(MoneyTransaction::isSpending)
-                .forEach(monthSpend::addSpending);
+        transactions.forEach(monthSpend::doTransaction);
         return monthSpend;
     }
 }
