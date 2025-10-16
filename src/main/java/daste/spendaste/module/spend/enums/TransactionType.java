@@ -13,10 +13,10 @@ public enum TransactionType {
     INCOMING_PENDING;    // incoming but undecided
 
     public static List<TransactionType> spendingTypes() {
-        return Arrays.asList(OUTGOING_INCLUDED, OUTGOING_PENDING);
+        return Arrays.asList(OUTGOING_INCLUDED, OUTGOING_PENDING, OUTGOING_EXCLUDED);
     }
 
     public static List<TransactionType> receivingTypes() {
-        return Arrays.asList(INCOMING_INCLUDED, INCOMING_PENDING);
+        return Arrays.asList(INCOMING_INCLUDED, INCOMING_PENDING, INCOMING_EXCLUDED);
     }
 }

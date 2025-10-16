@@ -88,11 +88,11 @@ public class MoneyTransaction extends BaseIdEntity {
 
     @JsonIgnore
     public Boolean isSpending() {
-        return TransactionType.OUTGOING_INCLUDED.equals(type) || TransactionType.OUTGOING_PENDING.equals(type);
+        return TransactionType.spendingTypes().contains(type);
     }
 
     @JsonIgnore
     public Boolean isReceiving() {
-        return TransactionType.INCOMING_INCLUDED.equals(type) || TransactionType.INCOMING_PENDING.equals(type);
+        return TransactionType.receivingTypes().contains(type);
     }
 }

@@ -4,7 +4,7 @@ server:
 
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/daste?currentSchema=public}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://103.149.46.134:5432/daste?currentSchema=public}
     username: ${SPRING_DATASOURCE_USERNAME:daste}
     password: ${SPRING_DATASOURCE_PASSWORD:daste}
   #  cache:
